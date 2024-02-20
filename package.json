@@ -1,0 +1,26 @@
+{
+  "name": "epic-css",
+  "version": "0.2.0",
+  "description": "CSS library with prebuild utilities",
+  "main": "src/index.scss",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "sass src/index.scss build/styles.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremyfaucher/epic-css.git"
+  },
+  "keywords": [
+    "CSS"
+  ],
+  "author": "Epic CSS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeremyfaucher/epic-css/issues"
+  },
+  "homepage": "https://github.com/jeremyfaucher/epic-css#readme",
+  "dependencies": {
+    "sass": "^1.70.0"
+  }
+}

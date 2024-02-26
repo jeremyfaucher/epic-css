@@ -1,5 +1,7 @@
 # epic-css
-A utility-first CSS framework that easily integrates with any node.js project like 11ty or Next.js. Yes it is very similar Tailwind but much more flexible and can be add to WordPress or PHP projects.
+A utility-first CSS framework that easily integrates with any node.js project like 11ty or Next.js. Yes it is very similar Tailwind but much more flexible and can be added to WordPress or PHP projects.
+
+## How to initilize a new node.js project
 
 1. **Initialize a new project**: Open your terminal or command prompt and navigate to the directory where you want to create your project. Then, run the following commands to create a new directory for your project and initialize it with npm (Node Package Manager):
 ```
@@ -9,6 +11,8 @@ npm init -y
 ```
 The `npm init -y` command will initialize a new npm project with default settings, automatically generating a `package.json` file.
 
+## Quick Start
+
 2. **Install dependencies**: 
 ```
 npm install sass
@@ -16,7 +20,15 @@ npm install epic-css
 ```
 This will install Sass and Epic CSS in your `package.json` file as dependencies.
 
-3. Add a folder in the `src` folder or your projects main folder and give it a name of your choice like `my-epic-css`. Then create `index.scss` file and add the imports like this:
+3. **Add script command**
+In your package.json file add the `epic-compile` command.
+
+```
+"epic-compile": "sass --style expanded --source-map --embed-sources --no-error-css --quiet src/my-epic-css/index.scss:src/_includes/style.css"
+```
+To use, run `npm run epic-compile`
+
+4. Add a folder in the `src` folder or your projects main folder and give it a name of your choice like `my-epic-css`. Then create `index.scss` file and add the imports like this:
 ```
 @import  "../../node_modules/epic-css/src/index";
 ```
@@ -39,7 +51,7 @@ my-project/
     ├── package.json
     └── README.md
 ```
-
+    
 Epic CSS will soon be shipping with the ability to only build the CSS that is being used in the `.html`,  `.njk`, `.php` and more.
 
 ## epic-css-11ty-theme
@@ -83,4 +95,24 @@ You will see a folder named my-epic-css with and index.scss file where you can c
 - Flex column for mobile first screens below medium: `flex-col`
 - Padding top 24px: `pt-24` or padding top and bottom 24px `py-24`.
 - Margin bottom 80px: `mb-80`
-- Gap of 24px: `flex` `gap-24`
+- Gap of 24px: `flex` `gap-24` 
+
+
+## Known Issues
+
+None at the moment.
+
+## Release Notes
+
+### 0.2.0
+
+Initial release of epic-css
+
+### 0.3.0
+
+-   Added epic build
+-   added epic light
+
+## Contribution
+
+This extension is open-source, contributions are always welcome!

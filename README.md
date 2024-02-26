@@ -110,9 +110,9 @@ Initial release of epic-css
 
 ### 0.3.0
 
--   Added epic build
--   added epic light
+-   Added epic-build - this builds like epic-compile but also adds a pre-light.css to the my-epic-css folder.
+-   Added epic-light - this uses the pre-light.css to filter used project class results and builds to project style.css.
 
 ## Contribution
 
-This extension is open-source, contributions are always welcome!
+This package is open-source, contributions are always welcome!

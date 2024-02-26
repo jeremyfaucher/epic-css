@@ -5,7 +5,10 @@
   "main": "src/index.scss",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "sass src/index.scss build/styles.css"
+    "build": "sass src/index.scss build/styles.css",
+    "epic-compile": "sass --style expanded --source-map --embed-sources --no-error-css --quiet src/my-epic-css/index.scss:src/_includes/style.css",
+    "epic-light": "node ./node_modules/epic-css/src/epic-light.js",
+    "epic-build": "node ./node_modules/epic-css/src/epic-build.js"
   },
   "repository": {
     "type": "git",
@@ -14,13 +17,19 @@
   "keywords": [
     "CSS"
   ],
-  "author": "Epic CSS",
+  "author": {
+    "name": "Jeremy Faucher",
+    "email": "hello.design2seo@gmail.com",
+    "url": "https://design2seo.com/"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jeremyfaucher/epic-css/issues"
   },
   "homepage": "https://github.com/jeremyfaucher/epic-css#readme",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "postcss": "^8.4.35",
     "sass": "^1.70.0"
   }
 }

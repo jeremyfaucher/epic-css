@@ -1,5 +1,6 @@
 body {
   font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.125rem;
   color: #d4d4d4;
   margin: 0px;
 }
@@ -38,6 +39,11 @@ article h2 {
 article p {
   margin-top: 0px;
   margin-bottom: 2rem;
+}
+article ul {
+  padding-left: 3rem;
+  list-style-type: circle;
+  line-height: 2rem;
 }
 
 h3 {

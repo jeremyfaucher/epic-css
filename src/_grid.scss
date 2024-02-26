@@ -183,9 +183,10 @@ $grid-fractions: (
   padding: 0 5%;
 }
 
+// Use the variable in your styles
 .container {
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: $container-width; // Using the variable
   box-sizing: border-box;
 }
 

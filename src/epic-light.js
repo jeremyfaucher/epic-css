@@ -3,7 +3,10 @@ const path = require('path');
 const cheerio = require('cheerio');
 const postcss = require('postcss');
 
-const epicConfig = require('../../../epicConfig'); // Adjust the path as needed
+// production
+const epicConfig = require('../../../epicConfig');
+// dev
+// const epicConfig = require('../../epicConfig');
 
 const rootDir = epicConfig.projectDir;
 const projectStyleDir = epicConfig.projectStyleDir;
@@ -64,7 +67,7 @@ const utilityClasses = extractUtilityClasses(rootDir, filePatterns);
 const prebuiltStyles = fs.readFileSync(prebuiltStylesPath, 'utf8');
 
 // Compare classes
-const usedClasses = ['body', 'h1', 'h2', 'h3', 'img', 'a', 'ul']; // Manually add the body, h1, and h2 classes
+const usedClasses = ['body', 'h1', 'h2', 'h3', 'img', 'a', 'ul', 'pre', 'code']; // Manually add the body, h1, and h2 classes
 utilityClasses.forEach(className => {
   if (prebuiltStyles.includes(`.${className}`)) {
     usedClasses.push(className);

@@ -1,7 +1,11 @@
 const fs = require('fs');
 const { exec } = require('child_process');
 const sass = require('sass');
+const path = require('path');
+// production
 const epicConfig = require('../../../epicConfig');
+// dev
+// const epicConfig = require('../../epicConfig');
 // Assuming epicConfig.epicThemeDir is the directory path
 const epicThemeDir = epicConfig.epicThemeDir;
 const sassFilePath = `${epicThemeDir}/pre-light.css`;

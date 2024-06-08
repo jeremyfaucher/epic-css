@@ -1,6 +1,6 @@
 {
   "name": "epic-css",
-  "version": "0.3.0",
+  "version": "0.7.0",
   "description": "CSS library with prebuild utilities",
   "main": "src/index.scss",
   "scripts": {
@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/jeremyfaucher/epic-css/issues"
   },
-  "homepage": "https://github.com/jeremyfaucher/epic-css#readme",
+  "homepage": "https://epiccss.com",
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "postcss": "^8.4.35",

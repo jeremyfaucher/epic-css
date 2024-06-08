@@ -9,7 +9,7 @@ const epicConfig = require('../../../epicConfig');
 // const epicConfig = require('../../epicConfig');
 
 const rootDir = epicConfig.projectDir;
-const projectStyleDir = epicConfig.projectStyleDir;
+const projectStylePath = path.resolve(epicConfig.projectStyleDir);
 const epicThemeDir = epicConfig.epicThemeDir; // Assuming epicConfig.epicThemeDir is the directory path
 const prebuiltStylesPath = path.join(epicThemeDir, 'pre-light.css');
 
@@ -77,24 +77,34 @@ utilityClasses.forEach(className => {
 // Parse the CSS using postcss
 const root = postcss.parse(prebuiltStyles);
 const filteredStyles = [];
+
+// First, process rules outside media queries
 root.walkRules(rule => {
-  // Check if the rule contains any of the utility classes
-  if (usedClasses.some(className => rule.selector.includes(className))) {
-    // Check if the parent node is a media query block
-    if (rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'media') {
-      // Include the media query block along with the matched rule
-      filteredStyles.push(rule.parent.toString());
+  if (!rule.parent || rule.parent.type !== 'atrule' || rule.parent.name !== 'media') {
+    if (usedClasses.some(className => rule.selector.includes(className))) {
+      filteredStyles.push(rule.toString());
     }
-    // Include the matched rule
-    filteredStyles.push(rule.toString());
   }
 });
 
-// Join the filtered styles and write them to a new file
+// Then, process media query blocks
+const addedMediaQueries = new Set();
+root.walkAtRules('media', atRule => {
+  let mediaBlock = atRule.toString();
+  atRule.walkRules(rule => {
+    if (usedClasses.some(className => rule.selector.includes(className))) {
+      if (!addedMediaQueries.has(mediaBlock)) {
+        filteredStyles.push(atRule.toString());
+        addedMediaQueries.add(mediaBlock);
+      }
+    }
+  });
+});
+
+// Join the filtered styles and write them to the style.css file
 const newStylesContent = filteredStyles.join('\n');
-const outputFilePath = path.join(projectStyleDir);
 
 // Write the new styles content to the file
-fs.writeFileSync(outputFilePath, newStylesContent, 'utf8');
+fs.writeFileSync(projectStylePath, newStylesContent, 'utf8');
 
-console.log(`Styles written to ${outputFilePath}`);
+console.log(`Styles written to ${projectStylePath}`);

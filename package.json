@@ -1,6 +1,6 @@
 {
   "name": "epic-css",
-  "version": "0.7.0",
+  "version": "0.11.0",
   "description": "CSS library with prebuild utilities",
   "main": "src/index.scss",
   "scripts": {

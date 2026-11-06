@@ -9,7 +9,8 @@ const epicConfig = require('../../../epicConfig');
 // const epicConfig = require('../../epicConfig');
 
 const rootDir = epicConfig.projectDir;
-const projectStylePath = path.resolve(epicConfig.projectStyleDir);
+//const projectStylePath = path.resolve(epicConfig.projectStyleDir);
+const projectStylePath = path.resolve(epicConfig.projectStyleDir, epicConfig.outputFileName);
 const epicThemeDir = epicConfig.epicThemeDir; // Assuming epicConfig.epicThemeDir is the directory path
 const prebuiltStylesPath = path.join(epicThemeDir, 'pre-light.css');
 
@@ -58,7 +59,8 @@ function extractUtilityClasses(rootDir, filePatterns) {
 }
 
 // Define file patterns
-const filePatterns = [/\.html$/, /\.njk$/];
+const filePatterns = [/\.html$/, /\.njk$/, /\.md$/];
+
 
 // Extract utility classes from the specified directories and file types
 const utilityClasses = extractUtilityClasses(rootDir, filePatterns);
@@ -67,7 +69,7 @@ const utilityClasses = extractUtilityClasses(rootDir, filePatterns);
 const prebuiltStyles = fs.readFileSync(prebuiltStylesPath, 'utf8');
 
 // Compare classes
-const usedClasses = ['body', 'h1', 'h2', 'h3', 'img', 'a', 'ul', 'pre', 'code']; // Manually add the body, h1, and h2 classes
+const usedClasses = [':root', 'body', 'h1', 'h2', 'h3', 'img', 'a', 'ul', 'pre', 'code']; // Added ':root' here
 utilityClasses.forEach(className => {
   if (prebuiltStyles.includes(`.${className}`)) {
     usedClasses.push(className);

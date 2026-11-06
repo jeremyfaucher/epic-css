@@ -1,76 +1,80 @@
-<p>Use with the <a href="https://github.com/jeremyfaucher/epic-css-11ty-theme" class="underline-clr target="_blank" rel="noopener">Epic CSS 11ty theme</a> from Github or add to any project using node.js and the <a href="https://www.npmjs.com/package/epic-css" class="underline-clr target="_blank" rel="noopener">epic-css node.js package</a>.</p>
+# Epic CSS
 
-## NPM custom install
+A Sass utility library with an optional source-class CSS filter. Install with `npm install epic-css sass`, or use the [Eleventy starter](https://github.com/jeremyfaucher/epic-css-11ty-theme). See [the live color lesson](https://epiccss.com/docs/#colors) for examples.
 
-1. **Install dependencies**:
-    ```
-    npm install sass
-    npm install epic-css
-    ``` 
-    This will install Sass and Epic CSS in your `package.json` file as dependencies.
+## Customize a palette
 
-2. **Add script command:**
+In `src/my-epic-css/index.scss`, assign your colors before importing the library:
 
-    In your package.json file add the `epic-compile` command.
+```scss
+@import "custom";
+@import "../../node_modules/epic-css/src/index";
+```
 
-    ```
-    "epic-compile": "sass --style expanded --source-map --embed-sources --no-error-css --quiet src/my-epic-css/index.scss:src/_includes/style.css"
-    ```
+In the adjacent `_custom.scss`, keep one complete palette active:
 
-    To use, run `npm run epic-compile`. This will build your style sheet based on the directory input and output for this folder structure or adjust as needed.
+```scss
+$clr-body: #1e1e1e;
+$clr-body-bg: #f4f6fa;
+$clr-primary: #0067b8;
+$clr-primary-light: #4f9eea;
+$clr-primary-bg: #dceeff;
+$clr-secondary: #7a7574;
+$clr-secondary-bg: #ececec;
+$clr-white: #ffffff;
+```
 
-    ```
-    my-project/
-        ├── src/
-        │   └── _include/
-        │       └── styles.css 
-        │   └── my-epic-css/
-        │       └── index.scss 
-        ├── node_modules/
-        ├── package.json
-        └── README.md
-    ```
+As of 0.14.1, all eight library color defaults use `!default`, so assignments made before import are preserved. Comment out the active palette's assignments before enabling another. With no overrides, the library uses its purple/green defaults. Sass compiles concrete colors; there is no runtime theme switch.
 
-3. **Import the Epic CSS library:**
+| Variable | Effect |
+| --- | --- |
+| `$clr-body` | Base body and link text |
+| `$clr-body-bg` | `.clr-body-bg` background |
+| `$clr-primary` | `.clr-primary` text and link accents |
+| `$clr-primary-light` | `main a.clr-underline:hover` accent |
+| `$clr-primary-bg` | `.clr-primary-bg` background |
+| `$clr-secondary` | `.clr-secondary` and code text |
+| `$clr-secondary-bg` | `.clr-secondary-bg`, code/pre backgrounds |
+| `$clr-white` | `.clr-white` text |
 
-    Add a folder in the `src` folder or your projects main folder and give it a name of your choice like `my-epic-css`. Then create `index.scss` file and add the imports like this:
+There is no standalone `.clr-body` or `.clr-primary-light`. Changing values updates declarations, not class names or shade counts. Check text/background contrast and hover states after a palette change; white text needs a suitable background.
 
-    ```
-    @import  "../../node_modules/epic-css/src/index";
-    ```
-    or individually like:
-    ```
-    @import  "../../node_modules/epic-css/src/_variables";
-    @import  "../../node_modules/epic-css/src/_base";
-    @import  "../../node_modules/epic-css/src/_fontramp";
-    @import  "../../node_modules/epic-css/src/_colors";
-    @import  "../../node_modules/epic-css/src/_images";
-    @import  "../../node_modules/epic-css/src/grid";
-    @import  "../../node_modules/epic-css/src/_spacers";
-    ```
+## Compile and filter
 
-## Remove any styles that are not in your project from .css build
+Compile full CSS in a consuming project:
 
-1. Add `epicConfig.js` file to the root of your project where your package.json lives.
+```sh
+npx --no-install sass src/my-epic-css/index.scss src/_includes/style.css
+```
 
-    ```js
-    module.exports = {
-        // project source folder where html, nunjucks or php files are
-        projectDir: './src',
-        // where epic css theme folder lives
-        epicThemeDir: './src/my-epic-css',
-        // folder and file where project style sheet lives
-        projectStyleDir: './src/_includes/style.css'
-    };
-    ```
+For an optional filtered build, add `epicConfig.js` beside the consumer's package.json:
 
-2. Add the following commands as of version 0.3.0
+```js
+module.exports = {
+  projectDir: './src',
+  epicThemeDir: './src/my-epic-css',
+  projectStyleDir: './src/_includes',
+  outputFileName: 'style.css'
+};
+```
 
-    ```js
-    "epic-light": "node ./node_modules/epic-css/src/epic-light.js",
-    "epic-build": "node ./node_modules/epic-css/src/epic-build.js"
-    ```
+Add these consumer npm scripts:
 
-3. Run `npm run epic-build` to do a quick start and add a pre-light.css to your project Epic CSS theme folder.
+```json
+"epic-build": "node ./node_modules/epic-css/src/epic-build.js",
+"epic-light": "node ./node_modules/epic-css/src/epic-light.js"
+```
 
-4. Then run `npm run epic-light` to search your project file from the projectDir and filter the found classes against the pre-light.css and build lightened version of your project styles.css.  
+Run `npm run epic-build`, then `npm run epic-light` from the consumer root. The first compiles full Sass into `pre-light.css` and copies it to `projectStyleDir/style.css`; the copy uses that hardcoded filename. The filter overwrites the configured output filename. Directories must exist. Build full CSS again after every Sass change before filtering. A missing pre-light file is not a usable baseline.
+
+Cheerio scans literal class attributes in raw `.html`, `.njk`, and `.md` source; it does not scan PHP or evaluate templates/JavaScript. PostCSS filters compiled CSS by substring matches and fixed base selectors, preserving whole matching media queries and emitting those after other matched rules. This is not exact dead-code removal, has no configured safelist, and may change ordering or mishandle other at-rule structures. Source maps are not regenerated by the filter. Preview all affected pages and responsive layouts after filtering, particularly with dynamic class names.
+
+In the maintained site/starter repositories, `npm start` compiles once before watching, `npm run build` runs Sass/filter/Eleventy, and `npm run validate` checks the same pipeline with temporary output and restored CSS. Those runners belong to the consumers; they are not commands installed by this library.
+
+## Contributing and releases
+
+`npm test` verifies all eight palette defaults and overrides against generated CSS. `npm run build` builds library CSS; `npm pack --dry-run` reviews the package contents. No JavaScript bundling is needed. Dependencies are Sass, Cheerio and PostCSS; Eleventy belongs to consumers.
+
+The maintained workflow is site first: develop and validate the [Epic CSS site](https://github.com/jeremyfaucher/epic-css-site), deploy and verify [production](https://epiccss.com/), port the verified shared code and relevant usage documentation here, test/inspect a packed release, publish a new version, then update and validate the Eleventy starter dependency/lockfile. A site-only content update does not require copying entire site pages into this README. See the site's [release guide](https://github.com/jeremyfaucher/epic-css-site/blob/main/RELEASING.md).
+
+Never publish a mixed working directory. Version 0.14.1 is a patch candidate for the color override fix, based on the registry's integrity-checked 0.14.0 source rather than unrelated local edits. A package release does not automatically update the CDN.

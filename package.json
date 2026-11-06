@@ -4,7 +4,7 @@
   "description": "CSS library with prebuild utilities",
   "main": "src/index.scss",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test/palette.cjs",
     "build": "sass src/index.scss build/styles.css",
     "epic-compile": "sass --style expanded --source-map --embed-sources --no-error-css --quiet src/my-epic-css/index.scss:src/_includes/style.css",
     "epic-light": "node ./node_modules/epic-css/src/epic-light.js",

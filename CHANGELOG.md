@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Make `npm run build` and `npm run epic-compile` generate full module CSS as `build/<package-version>.css` with a matching source map and embedded Sass sources.
+- Verify package-version filename derivation, portable map references, retained older artifacts, and compilation failures. Build commands leave consumer customization and pre-light artifacts untouched.
+
 ## 0.14.1
 
 - Preserve all eight consumer palette values assigned before importing the library by declaring fallback colors with `!default`.

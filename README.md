@@ -73,7 +73,9 @@ In the maintained site/starter repositories, `npm start` compiles once before wa
 
 ## Contributing and releases
 
-`npm test` verifies all eight palette defaults and overrides against generated CSS. `npm run build` builds library CSS; `npm pack --dry-run` reviews the package contents. No JavaScript bundling is needed. Dependencies are Sass, Cheerio and PostCSS; Eleventy belongs to consumers.
+`npm test` verifies all eight palette defaults and overrides, plus versioned build behavior. From this module checkout, `npm run build` or `npm run epic-compile` compiles full, unfiltered `src/index.scss` into `build/<package-version>.css` and `build/<package-version>.css.map`. Both commands read `package.json` each time; version 0.14.1 produces `build/0.14.1.css`. The expanded CSS references its matching map, which embeds the Sass sources. Older versioned artifacts are retained. Neither command imports the site's customization or updates `src/pre-light.css`.
+
+The versioned CSS can be prepared for a manual CDN upload, but its filename identifies the local package version, not proof of a published release. Review the current module source and release version before replacing an existing CDN asset. Building does not publish, upload, or bump a version. `npm pack --dry-run` reviews package contents. No JavaScript bundling is needed. Dependencies are Sass, Cheerio and PostCSS; Eleventy belongs to consumers.
 
 The maintained workflow is site first: develop and validate the [Epic CSS site](https://github.com/jeremyfaucher/epic-css-site), deploy and verify [production](https://epiccss.com/), port the verified shared code and relevant usage documentation here, test/inspect a packed release, publish a new version, then update and validate the Eleventy starter dependency/lockfile. A site-only content update does not require copying entire site pages into this README. See the site's [release guide](https://github.com/jeremyfaucher/epic-css-site/blob/main/RELEASING.md).
 

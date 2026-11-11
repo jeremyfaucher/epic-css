@@ -5,7 +5,7 @@ body {
   font-size: $fs-body;
   line-height: $lh-body;
   color: $clr-body;
-  margin: 3px;
+  margin: 0px;
 }
 
 p {
@@ -115,12 +115,12 @@ article {
     line-height: 2rem;
     margin-bottom: 24px;
   }
-
+  
   /* Default list items */
   li {
     margin-bottom: 0.75rem;
   }
-
+  
   /* List items that contain <p> (Markdown block items) */
   li p {
     margin-bottom: 0.75rem;

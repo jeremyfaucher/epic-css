@@ -34,3 +34,10 @@ jobs:
       - run: npm ci
       - run: npm install -g npm@11
       - run: npm publish
+      - name: Verify published package
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          mkdir -p /tmp/epiccss-test
+          cd /tmp/epiccss-test
+          npm init -y
+          npm install "epic-css@$VERSION"

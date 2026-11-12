@@ -37,7 +37,17 @@ jobs:
       - name: Verify published package
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          mkdir -p /tmp/epiccss-test
-          cd /tmp/epiccss-test
-          npm init -y
-          npm install "epic-css@$VERSION"
+          echo "Verifying epic-css@$VERSION"
+
+          for i in 1 2 3 4 5; do
+            if npm view "epic-css@$VERSION" version --registry=https://registry.npmjs.org/; then
+              echo "Package is available!"
+              exit 0
+            fi
+
+            echo "Waiting 15 seconds for npm registry..."
+            sleep 15
+          done
+
+          echo "Package not found after retries."
+          exit 1

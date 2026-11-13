@@ -1,10 +1,10 @@
 {
   "name": "epic-css",
-  "version": "0.14.3",
+  "version": "0.14.4",
   "description": "CSS library with prebuild utilities",
   "main": "src/index.scss",
   "scripts": {
-    "test": "node test/palette.cjs && node test/build.cjs",
+    "test": "node test/palette.cjs && node test/spacers.cjs && node test/build.cjs",
     "prepublishOnly": "npm test",
     "build": "node scripts/build.cjs",
     "epic-compile": "node scripts/build.cjs",
@@ -42,6 +42,7 @@
     "src/epic-build.js",
     "src/epic-light.js",
     "test/palette.cjs",
+    "test/spacers.cjs",
     "test/build.cjs",
     "scripts/build.cjs",
     "CHANGELOG.md"

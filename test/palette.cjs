@@ -8,7 +8,9 @@ const compile = (prefix = '') => postcss.parse(sass.compileString(
 ).css);
 const declaration = (css, selector, property) => {
   let value;
-  css.walkRules(selector, rule => rule.walkDecls(property, decl => { value = decl.value; }));
+  css.walkRules(rule => {
+    if (rule.selector.replaceAll('"', '') === selector.replaceAll('"', '')) rule.walkDecls(property, decl => { value = decl.value; });
+  });
   assert.ok(value, `Missing ${selector} { ${property} }`);
   return value;
 };
@@ -25,8 +27,20 @@ const cases = [
 const defaults = compile();
 const overrides = cases.map(([variable], i) => `$${variable}: #12345${i};`).join('\n');
 const custom = compile(overrides);
-cases.forEach(([, selector, property, expected], i) => {
-  assert.equal(declaration(defaults, selector, property), expected);
-  assert.equal(declaration(custom, selector, property), `#12345${i}`);
+cases.forEach(([variable, selector, property, expected], i) => {
+  assert.equal(declaration(defaults, ':root', `--${variable}`), expected);
+  assert.equal(declaration(custom, ':root', `--${variable}`), `#12345${i}`);
+  assert.equal(declaration(defaults, selector, property), `var(--${variable}, ${expected})`);
+  assert.equal(declaration(custom, selector, property), `var(--${variable}, #12345${i})`);
 });
-console.log('Palette regression: all eight defaults and consumer overrides pass.');
+assert.ok(!defaults.toString().includes('data-theme'), 'Single-palette consumers do not receive workshop modes');
+const roles = cases.map(([variable], index) => `"${variable.slice(4)}": #12345${index}`).join(', ');
+const modes = compile(`$color-modes: (light: (${roles}), dark: (${roles}));`);
+for (const mode of ['light', 'dark']) {
+  cases.forEach(([variable], index) => assert.equal(declaration(modes, `html[data-theme="${mode}"]`, `--${variable}`), `#12345${index}`));
+}
+assert.throws(() => compile('$color-modes: (light: (body: #000));'), /both light and dark/);
+assert.throws(() => compile('$color-modes: (light: (body: #000), dark: (body: #fff));'), /all eight/);
+const baseOnly = postcss.parse(sass.compileString('@import "variables"; @import "base";', { loadPaths: [path.resolve(__dirname, '../src')] }).css);
+assert.equal(declaration(baseOnly, 'body', 'color'), 'var(--clr-body, #ffffff)', 'Selective base keeps its Sass fallback');
+console.log('Palette regression: eight defaults/overrides, paired runtime roles, incomplete-map rejection and selective base fallback pass.');

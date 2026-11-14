@@ -40,5 +40,16 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "Checking epic-css@$VERSION"
 
-          npm view "epic-css@$VERSION" version \
-            --registry=https://registry.npmjs.org/
+          for i in {1..6}; do
+            if npm view "epic-css@$VERSION" version \
+              --registry=https://registry.npmjs.org/; then
+              echo "Package verified successfully!"
+              exit 0
+            fi
+
+            echo "Not available yet. Retrying in 10 seconds..."
+            sleep 10
+          done
+
+          echo "Package not yet visible on npm."
+          exit 1

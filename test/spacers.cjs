@@ -32,7 +32,22 @@ for (const [key, value] of Object.entries(values)) {
       Object.fromEntries(names.map(name => [name, value.replace(/^\./, '0.')])));
   }
 }
-assert.equal(rules.size, Object.keys(values).length * Object.keys(properties).length);
+assert.deepEqual(rules.get('.mb-lg-0'), { 'margin-bottom': '0' });
+assert.equal(rules.size, Object.keys(values).length * Object.keys(properties).length + 1);
+const responsiveCss = sass.compileString('@import "variables"; @import "spacers";', {
+  loadPaths: [path.join(__dirname, '../src')], logger: sass.Logger.silent
+}).css;
+let resetPosition;
+let mobilePosition;
+postcss.parse(responsiveCss).walkRules(rule => {
+  if (rule.selector === '.mb-24') mobilePosition = rule.source.start.offset;
+  if (rule.selector === '.mb-lg-0') {
+    assert.equal(rule.parent.type, 'atrule');
+    assert.equal(rule.parent.params, '(min-width: 960px)');
+    resetPosition = rule.source.start.offset;
+  }
+});
+assert.ok(resetPosition > mobilePosition, 'Large reset must follow base margins to win the cascade');
 const custom = compile('@import "variables"; $spacer: 2rem; $spacers: (0: 0, 4: $spacer * .25, 40: $spacer * 2.5); @import "spacers";');
 assert.deepEqual(custom.get('.gap-40'), { gap: '5rem' });
 assert.deepEqual(custom.get('.mx-40'), { 'margin-left': '5rem', 'margin-right': '5rem' });

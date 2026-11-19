@@ -18,7 +18,7 @@ const cases = [
   ['clr-body', 'body', 'color', '#ffffff'],
   ['clr-body-bg', '.clr-body-bg', 'background-color', '#2e106a'],
   ['clr-primary', '.clr-primary', 'color', '#00d886'],
-  ['clr-primary-light', 'main a.clr-underline:hover', 'color', '#00e78f'],
+  ['clr-primary-light', 'a.clr-underline:hover', 'color', '#00e78f'],
   ['clr-primary-bg', '.clr-primary-bg', 'background', '#3e1689'],
   ['clr-secondary', '.clr-secondary', 'color', '#c6c9e5'],
   ['clr-secondary-bg', '.clr-secondary-bg', 'background', '#412677'],

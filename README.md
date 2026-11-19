@@ -3,6 +3,32 @@
 A Sass utility library with an optional source-class CSS filter. Install with `npm install epic-css sass`, or use the [Eleventy starter](https://github.com/jeremyfaucher/epic-css-11ty-theme). See [the live color lesson](https://epiccss.com/docs/colors/) for examples.
 
 **Changelog / Release History:** the [Epic CSS changelog](https://epiccss.com/docs/changelog/) documents previous releases, new features, improvements and bug fixes, newest first.
+## Selected grid tracks
+
+Combine `grid` with a selected responsive track class. The default `$grid-patterns`
+map emits only these combinations:
+
+| Class | Minimum viewport width | Tracks |
+| --- | --- | --- |
+| `grid-md-1fr-4fr` | 820px | Existing `1fr 4fr` behavior |
+| `grid-md-1fr-1fr` | 820px | Two equal tracks |
+| `grid-lg-1fr-2fr` | 960px | One share beside two shares |
+| `grid-lg-1fr-1fr-1fr` | 960px | Three equal tracks |
+
+Set `$grid-patterns` before importing the library to replace its defaults. Outer
+keys select breakpoints; inner keys name track patterns and values define their
+track lists. Only listed combinations are generated. New patterns use
+`minmax(0, 1fr)` / `minmax(0, 2fr)` tracks. `$sidebar-widths` remains separate.
+See the [grid guide](https://epiccss.com/docs/grid/#customize-track-patterns) for the complete map.
+
+Responsive 25%, 50%, and 75% width helpers are retired. The starter's featured
+post uses equal grid tracks from medium; reading regions use inline
+`max-width: 776px`, filling narrower screens. The old `grid-col-2` and `grid-col-3`
+auto-fit definitions remain as Sass comments for reference and emit no CSS.
+`w-100` remains available. `flex-basis-100` supplies all three slider panels with
+non-shrinking full-width tracks; `flex-basis-300` remains defined and documented,
+with no current first-party template usages.
+
 ## Choose a named palette
 
 In the maintained site or Eleventy starter, open `src/my-epic-css/_custom.scss` and change one setting:
@@ -129,8 +155,8 @@ Never publish a mixed working directory. Version 0.14.1, the color override fix,
 
 [CHANGELOG.md](CHANGELOG.md) is the source of truth for release notes. The site parses an identical copy for [its changelog page](https://epiccss.com/docs/changelog/), so keep this structure:
 
-1. As each feature or fix is implemented, immediately record it under the planned next-version heading, currently `## [Unreleased] - 0.14.5`, as a short bullet in one of these groups, using this order: `### Added`, `### Changed`, `### Deprecated`, `### Removed`, `### Fixed`, `### Security`. Omit empty groups. Write for consumers: name the class, variable or command and say what changed.
-2. Keep package and lockfile versions unchanged during development. The version on the Unreleased heading is a plan, not a published release, and has no date. Only when explicitly asked to prepare a release, finalize the approved version and real UTC release date as `## [X.Y.Z] - YYYY-MM-DD`, update package/lockfile versions together, and add a new `## [Unreleased] - NEXT.VERSION` heading for the next agreed target. Do not invent a release date or publish, tag or commit as part of routine feature work.
+1. As each feature or fix is implemented, immediately record it under `## [Unreleased]` (or `## [Unreleased] - NEXT.VERSION` when a target is agreed), as a short bullet in one of these groups, using this order: `### Added`, `### Changed`, `### Deprecated`, `### Removed`, `### Fixed`, `### Security`. Omit empty groups. Write for consumers: name the class, variable or command and say what changed.
+2. Keep package and lockfile versions unchanged during development. A version on the Unreleased heading is a plan, not a published release, and has no date. Only when explicitly asked to prepare a release, finalize the approved version and real UTC release date as `## [X.Y.Z] - YYYY-MM-DD`, update package/lockfile versions together, and add a new `## [Unreleased]` heading, with the next target only if agreed. Do not invent a release date or publish, tag or commit as part of routine feature work.
 3. Update the link definitions at the end: point `[Unreleased]` at `compare/vX.Y.Z...HEAD` and add `[X.Y.Z]: https://github.com/jeremyfaucher/epic-css/releases/tag/vX.Y.Z`.
 4. After a versioned CDN stylesheet is publicly available at a permanent URL, add `[X.Y.Z-cdn]: <URL>`. The site then shows a CDN link for that version. Do not add it before the asset exists, and do not remove links for retained older versions.
 5. After every changelog edit, run `npm run changelog:sync` and `npm run validate` in the site checkout. The library file remains authoritative; do not edit the site copy directly. Commit or publish only when explicitly requested.
